@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyber.mapper.ArticleFavoriteMapper">
+
+    <!-- 手动封住结果集 -->
+    <resultMap type="Article" id="articleFavoriteMap" autoMapping="true">
+        <id column="article_id" property="articleId"/>
+        <association property="category" javaType="Category" autoMapping="true">
+            <id column="category_id" property="categoryId"/>
+        </association>
+        <association property="user" javaType="User" autoMapping="true">
+            <id column="user_id" property="userId"/>
+        </association>
+    </resultMap>
+
+    <!-- 收藏文章 -->
+    <insert id="articleFavorite">
+        insert into tb_article_favorites (user_id, article_id)
+        values (#{userId}, #{articleId})
+    </insert>
+
+    <select id="showFavoriteArticle" resultMap="articleFavoriteMap">
+        SELECT *
+        FROM tb_article
+        WHERE article_id IN (SELECT article_id FROM tb_article_favorites WHERE user_id = #{userId})
+    </select>
+
+</mapper>

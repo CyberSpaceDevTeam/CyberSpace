@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyber.mapper.UserMapper">
+    <select id="selectUserByName" resultType="com.cyber.pojo.User">
+        select *
+        from tb_user
+        where user_name = #{userName}
+    </select>
+    <select id="selectUserByEmail" resultType="com.cyber.pojo.User">
+        select *
+        from tb_user
+        where email = #{email}
+    </select>
+    <select id="selectUserByNameAndPwd" resultType="com.cyber.pojo.User">
+        select *
+        from tb_user
+        where user_name = #{userName}
+          and user_pwd = #{userPwd}
+    </select>
+    <select id="selectUserByEmailAndPwd" resultType="com.cyber.pojo.User">
+        select *
+        from tb_user
+        where email = #{email}
+          and user_pwd = #{userPwd}
+    </select>
+
+    <insert id="insertUser">
+        insert into tb_user (user_name, user_pwd, email)
+        values (#{userName}, #{userPwd}, #{email})
+
+    </insert>
+    <select id="currUser" resultType="User">
+        select *
+        from tb_user
+    </select>
+</mapper>

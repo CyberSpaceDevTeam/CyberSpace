@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+    <!-- 使用组件扫描 -->
+    <!-- 将action扫描出来，在spring容器中进行注册，自动对action在spring容器中进行配置 -->
+    <!--
+        <context:component-scan base-package="com.cyber" />
+        &lt;!&ndash; 拦截器 &ndash;&gt;
+        &lt;!&ndash; 登录拦截器 &ndash;&gt;
+        <mvc:interceptors>
+            <mvc:interceptor>
+                <mvc:mapping path="/*"/> &lt;!&ndash; 拦截路径 &ndash;&gt;
+                <mvc:exclude-mapping path="/index.jsp"/>  &lt;!&ndash; 排除的拦截路径 &ndash;&gt;
+                <mvc:exclude-mapping path="/user_sign_in"/>  &lt;!&ndash; 排除的拦截路径 &ndash;&gt;
+                <bean class="com.cyber.interceptor.LoginInterceptor"></bean>
+            </mvc:interceptor>
+        </mvc:interceptors>
+    -->
+
+</beans>

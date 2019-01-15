@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyber.mapper.ColumnMapper">
+
+    <!-- 手动封住结果集 -->
+    <resultMap type="Column" id="columnMap" autoMapping="true">
+        <id column="column_id" property="columnId"/>
+        <association property="user" javaType="User"
+                     autoMapping="true">
+            <id column="user_id" property="userId"/>
+            <result column="user_name" property="userName"/>
+        </association>
+    </resultMap>
+
+    <select id="columnList" resultMap="columnMap">
+        SELECT *
+        FROM tb_column
+    </select>
+
+    <!-- 手动封住结果集 -->
+    <resultMap type="Column" id="columnArticleMap"
+               autoMapping="true">
+        <id column="column_id" property="columnId"/>
+        <collection property="articleList" ofType="Article">
+            <id column="article_id" property="articleId"/>
+            <result column="article_name" property="articleName"/>
+            <result column="article_path" property="articlePath"/>
+            <result column="article_ctime" property="articleCtime"/>
+            <result column="article_utime" property="articleUtime"/>
+            <result column="article_content" property="articleContent"/>
+            <result column="click_count" property="clickCount"/>
+            <!-- <result column="category" property="category" /> -->
+            <association property="user" javaType="User"
+                         autoMapping="true">
+                <id column="user_id" property="userId"/>
+            </association>
+        </collection>
+    </resultMap>
+
+    <select id="columnArticle" resultMap="columnArticleMap">
+        SELECT *
+        FROM tb_column_article tb1
+                 LEFT JOIN (SELECT * FROM tb_article) tb2 ON tb1.article_id = tb2.article_id
+                 LEFT JOIN (SELECT * FROM tb_column) tb3 ON tb1.column_id =
+                                                            tb3.column_id
+        WHERE tb3.column_id = #{columnId}
+    </select>
+
+</mapper>

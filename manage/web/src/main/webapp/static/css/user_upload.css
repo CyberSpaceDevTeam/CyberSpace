@@ -1,0 +1,50 @@
+.upload_body {
+    margin: auto;
+}
+
+.upload_nav {
+    height: 65px;
+    width: 100%;
+    /*background-color: aqua;*/
+    position: fixed;
+}
+
+.title {
+    float: left;
+}
+
+.upload_nav ul li {
+    float: left;
+    /*color: #fff;*/
+    list-style: none;
+    line-height: 50%;
+}
+
+.upload_nav_li1 {
+    width: 60%;
+}
+
+.upload_nav_li2 {
+    /*width: 15%;*/
+    margin-left: 75%;
+}
+
+.upload_nav_li3 {
+    margin-left: 5%;
+}
+
+.upload_nav_li4 {
+    margin-left: 5%;
+}
+
+.upload_edit_area {
+    width: 60%;
+    height: 1000px;
+    margin-left: 10%;
+    /*background-color: #d7fffb;*/
+}
+
+.upload_foot {
+    height: 100px;
+    /*background-color: #9f9c9e;*/
+}

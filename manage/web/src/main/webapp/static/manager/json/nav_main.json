@@ -1,0 +1,57 @@
+{
+  "data": [
+    {
+      "text": "用户管理",
+      "icon": "&#xe620;",
+      "subset": [
+        {
+          "text": "普通用户数据",
+          "icon": "&#xe621;",
+          "href": "assets/user_table.html"
+        },
+        {
+          "text": "管理员数据",
+          "icon": "&#xe621;",
+          "href": "assets/user_table.html"
+        }
+      ]
+    },
+    {
+      "text": "资源管理",
+      "icon": "&#xe628;",
+      "subset": [
+        {
+          "text": "文章详情",
+          "icon": "&#xe621;",
+          "href": "assets/resource_table.html"
+        },
+        {
+          "text": "视频详情",
+          "icon": "&#xe621;",
+          "href": "assets/resource_table.html"
+        },
+        {
+          "text": "其他资源",
+          "icon": "&#xe621;",
+          "href": "assets/resource_table.html"
+        }
+      ]
+    },
+    {
+      "text": "数据分析",
+      "icon": "&#xe61e;",
+      "subset": [
+        {
+          "text": "模型检测",
+          "icon": "&#xe621;",
+          "href": "assets/data_analysis.html"
+        },
+        {
+          "text": "实时点击",
+          "icon": "&#xe621;",
+          "href": "assets/bubble-gradient.html"
+        }
+      ]
+    }
+  ]
+}

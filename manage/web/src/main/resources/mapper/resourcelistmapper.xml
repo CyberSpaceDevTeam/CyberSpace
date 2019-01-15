@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyber.mapper.resourceSysMapper.ResourceListMapper">
+
+    <!-- 资源清单 -->
+    <insert id="saveResourcelist">
+        insert into tb_resourcelist
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resourcelistId !=null">resourcelist_id,</if>
+            <if test="user.userId!=null">user_id,</if>
+            <if test="resourcelistName !=null">resourcelist_name,</if>
+            <if test="resourcelistDesc !=null">resourcelist_desc,</if>
+            <if test="resourcelistPicture !=null">resourcelist_picture,</if>
+            <if test="resourcelistCtime !=null">resourcelist_ctime,</if>
+            <if test="resourcelistUtime !=null">resourcelist_utime</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resourcelistId!=null">#{resourcelistId},</if>
+            <if test="user.userId!=null">#{user.userId},</if>
+            <if test="resourcelistName!=null">#{resourcelistName},</if>
+            <if test="resourcelistDesc !=null">#{resourcelistDesc},</if>
+            <if test="resourcelistPicture !=null">#{resourcelistPicture},</if>
+            <if test="resourcelistCtime !=null">#{resourcelistCtime},</if>
+            <if test="resourcelistUtime !=null">#{resourcelistUtime}</if>
+        </trim>
+    </insert>
+
+    <!-- 查询全部资源清单 -->
+
+    <sql id="selectlist">
+        SELECT *
+        FROM tb_resourcelist
+                 LEFT JOIN (SELECT user_id u_id, user_name u_name FROM tb_user) u ON u.u_id = user_id
+    </sql>
+
+    <resultMap type="ResourceList" id="listRM" autoMapping="true">
+        <id column="resourcelist_id" property="resourcelistId"/>
+        <!-- 主表使用驼峰映射，其他字段不写了 -->
+        <!-- 上级部门：一个上级部门只用一个上级部门 -->
+        <association property="user" javaType="User">
+            <id column="u_id" property="userId"/>
+            <result column="u_name" property="userName"/>
+        </association>
+    </resultMap>
+
+
+    <select id="findListAll" resultMap="listRM">
+        <include refid="selectlist"/>where state=1
+    </select>
+    <select id="findListAllById" resultMap="listRM">
+        <include refid="selectlist"/>where state=1 AND user_id=#{userId}
+    </select>
+
+    <!-- 点击次数 -->
+    <update id="updatelistCount">
+        UPDATE tb_resourcelist
+        SET resourcelist_count = resourcelist_count + 1
+        WHERE resourcelist_id = #{resourcelistId}
+    </update>
+
+    <!-- 资源清单详情 -->
+    <select id="findListOne" resultMap="listRM">
+        <include refid="selectlist"/>where resourcelist_id=#{resourcelistId} And state=1;
+    </select>
+    <!-- 资源清单内容 -->
+
+    <select id="findListResource" resultType="Resource">
+        SELECT resource_id, resource_name
+        FROM tb_resource
+        WHERE resource_id IN (SELECT resource_id FROM tb_resourcelist_resouce WHERE resourcelist_id = #{resourcelistId})
+    </select>
+
+
+    <!-- 修改资源清单详情 -->
+    <update id="updateResourceList">
+        update tb_resourcelist
+        <set>
+            <if test="resourcelistName!= null">resourcelist_name=#{resourcelistName},</if>
+            <if test="resourcelistDesc != null">resourcelist_desc=#{resourcelistDesc},</if>
+            <if test="user.userId != null">user_id=#{user.userId},</if>
+            <if test="resourcelistPicture != null">resourcelist_picture=#{resourcelistPicture},</if>
+            <if test="resourcelistUtime != null">resourcelist_utime=#{resourelistUtime}</if>
+        </set>
+        where resourcelist_id=#{resourcelistId}
+    </update>
+
+
+    <!-- 删除清单 -->
+    <update id="deleteResourcelist">
+        update tb_resourcelist
+        set state = 0
+        where resourcelist_id = #{resourcelistId}
+    </update>
+
+
+    <!-- 添加资源到清单 -->
+    <insert id="saveResourceToList">
+        INSERT INTO tb_resourcelist_resouce (resourcelist_id, resource_id)
+        VALUES (#{resourcelistId}, #{resourceId})
+    </insert>
+
+    <!-- 删除资源从清单 -->
+    <delete id="deleteResourceToList">
+        DELETE
+        FROM tb_resourcelist_resouce
+        WHERE resourcelist_id = #{resourcelistId}
+          AND resource_id = #{resourceId}
+    </delete>
+
+
+    <!-- 查询未添加的资源 -->
+    <select id="findNotResource" resultType="Resource">
+        SELECT *
+        FROM tb_resource
+        WHERE resource_id NOT IN (SELECT resource_id
+                                  FROM tb_resource
+                                  WHERE resource_id IN (SELECT resource_id
+                                                        FROM tb_resourcelist_resouce
+                                                        WHERE resourcelist_id = #{resourcelistId}))
+          AND state = 1
+    </select>
+</mapper>
+

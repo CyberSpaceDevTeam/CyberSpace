@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Rmper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyber.mapper.resourceSysMapper.ResourceMapper">
+    <!-- 动态的插入一条信息 -->
+    <insert id="saveResource">
+        insert into tb_resource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resourceId !=null">resource_id,</if>
+            <if test="resourceName !=null">resource_name,</if>
+            <if test="resourceDesc !=null">resource_desc,</if>
+            <if test="type.typeId!=null">type_id,</if>
+            <if test="resourcePath !=null">resource_path,</if>
+            <if test="resourcePwd!=null">resource_pwd,</if>
+            <if test="user.userId!=null">user_id,</if>
+            <if test="resourcePicture !=null">resource_picture,</if>
+            <if test="category.categoryId !=null">category_id,</if>
+            <if test="resourceCtime !=null">resource_ctime,</if>
+            <if test="resourceUtime !=null">resource_utime</if>
+            <if test="power !=null">power</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resourceId!=null">#{resourceId},</if>
+            <if test="resourceName!=null">#{resourceName},</if>
+            <if test="resourceDesc !=null">#{resourceDesc},</if>
+            <if test="type.typeId!=null">#{type.typeId},</if>
+            <if test="resourcePath !=null">#{resourcePath},</if>
+            <if test="resourcePwd!=null">#{resourcePwd},</if>
+            <if test="user.userId!=null">#{user.userId},</if>
+            <if test="resourcePicture !=null">#{resourcePicture},</if>
+            <if test="category.categoryId !=null">#{category.categoryId},</if>
+            <if test="resourceCtime !=null">#{resourceCtime},</if>
+            <if test="resourceUtime !=null">#{resourceUtime}</if>
+            <if test="power !=null">power</if>
+        </trim>
+    </insert>
+
+
+    <!-- 查询资源 -->
+    <resultMap type="Resource" id="resourceRM" autoMapping="true">
+        <id column="resource_id" property="resourceId"/>
+        <!-- 主表使用驼峰映射，其他字段不写了 -->
+        <!-- 上级部门：一个上级部门只用一个上级部门 -->
+        <association property="type" javaType="Type">
+            <id column="t_id" property="typeId"/>
+            <result column="t_name" property="typeName"/>
+        </association>
+        <association property="category" javaType="Category">
+            <id column="c_id" property="categoryId"/>
+            <result column="c_name" property="categoryName"/>
+        </association>
+        <association property="user" javaType="User">
+            <id column="u_id" property="userId"/>
+            <result column="u_name" property="userName"/>
+        </association>
+    </resultMap>
+
+    <sql id="selectResource">
+        SELECT *
+        FROM (SELECT *
+              FROM (SELECT *
+                    FROM tb_resource r
+                             LEFT JOIN (SELECT type_id t_id, type_name t_name FROM tb_type) t ON r.type_id = t.t_id)rt
+                       LEFT JOIN (SELECT user_id u_id, user_name u_name FROM tb_user)u ON rt.user_id = u.u_id)ut
+                 LEFT JOIN (SELECT category_id c_id, category_name c_name FROM tb_category)ct
+                     ON ut.category_id = ct.c_id
+    </sql>
+    <!-- 查询所有 -->
+    <select id="findResource" resultMap="resourceRM">
+        <include refid="selectResource"/>
+        where state = 1 ;
+    </select>
+
+    <select id="pageResource" resultMap="resourceRM">
+        <include refid="selectResource"/>
+        Where state = 1 AND user_id=#{userId} limit<if test="pageStart!=null">#{pageStart}</if>,#{pageSize}
+    </select>
+
+    <select id="resourceCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM tb_resource
+        where user_id = #{userId}
+          And state = 1
+    </select>
+
+
+    <!-- 查询单个-->
+    <select id="getInfoResOne" resultMap="resourceRM">
+        <include refid="selectResource"/>where state = 1 and resource_id=#{resourceId} ;
+    </select>
+    <!-- 查询类别 -->
+    <select id="findTypeAll" resultType="Type">
+        SELECT *
+        FROM tb_type
+    </select>
+    <!-- 查询种类 -->
+    <select id="findCategoryAll" resultType="Category">
+        SELECT *
+        FROM tb_category
+    </select>
+
+    <!-- 分类查询 -->
+    <select id="findTypeAndCategory" resultMap="resourceRM">
+        <include refid="selectResource"/>where state = 1
+        <if test="typeId !=null">and type_id=#{typeId}</if>
+        <if test="categoryId !=null">and category_id=#{categoryId}</if>
+    </select>
+    <!-- 修改-->
+    <update id="updateResource">
+        update tb_resource
+        <set>
+            <if test="resourceName!= null">resource_name=#{resourceName},</if>
+            <if test="resourceDesc != null">resource_desc=#{resourceDesc},</if>
+            <if test="type.typeId != null">type_id=#{type.typeId},</if>
+            <if test="resourcePath != null">resource_path=#{resourcePath},</if>
+            <if test="resourcePwd != null">resource_pwd=#{resourcePwd},</if>
+            <if test="user.userId != null">user_id=#{user.userId},</if>
+            <if test="resourcePicture != null">resource_picture=#{resourcePicture},</if>
+            <if test="category.categoryId != null">category_id=#{category.categoryId},</if>
+            <if test="resourceUtime != null">resource_utime=#{resoureUtime}</if>
+        </set>
+        where resource_id=#{resourceId}
+    </update>
+
+
+    <!-- 删除 -->
+    <update id="deleteResource">
+        update tb_resource
+        set state = 0
+        where resource_id = #{resourceId}
+    </update>
+
+    <!-- 点击次数 -->
+    <update id="updateCount">
+        UPDATE tb_resource
+        SET resource_count = resource_count + 1
+        WHERE resource_id = #{resourceId}
+    </update>
+
+
+    <!-- 评分 -->
+    <insert id="saveRscore">
+        insert into tb_resource_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId !=null">user_id,</if>
+            <if test="resourceId !=null">resource_id,</if>
+            <if test="resourceScore !=null">resource_score,</if>
+            <if test="resourceTime !=null">resource_time</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId!=null">#{userId},</if>
+            <if test="resourceId!=null">#{resourceId},</if>
+            <if test="resourceScore !=null">#{resourceScore},</if>
+            <if test="resourceTime !=null">#{resourceTime}</if>
+        </trim>
+    </insert>
+
+    <!-- 查询评分 -->
+
+    <select id="findRscore" resultType="Resourcescore">
+        SELECT *
+        FROM tb_resource_score
+        WHERE user_id = #{userId}
+          AND resource_id = #{resourceId}
+    </select>
+
+
+    <!-- 平均分 -->
+    <select id="avgRscore" resultType="Float">
+        SELECT AVG(resource_score)
+        FROM tb_resource_score
+        WHERE resource_id = #{resourceId}
+    </select>
+
+    <!-- -->
+
+    <select id="showResource" resultMap="resourceRM">
+        SELECT *
+        FROM tb_resource
+        WHERE resource_id = (SELECT MAX(resource_id) FROM tb_resource)
+    </select>
+
+    <select id="showArticleById" resultMap="resourceRM">
+        SELECT *
+        FROM tb_resource
+        WHERE resource_id = #{resourceId};
+    </select>
+
+
+    <select id="selectTop" resultMap="resourceRM">
+        SELECT *
+        FROM tb_resource
+        ORDER BY resource_count DESC;
+    </select>
+    <!-- -->
+
+    <!-- 资源清单 -->
+    <insert id="saveResourcelist">
+        insert into tb_resourcelist
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resourcelistId !=null">resourcelist_id,</if>
+            <if test="user.userId!=null">user_id,</if>
+            <if test="resourcelistName !=null">resourcelist_name,</if>
+            <if test="resourcelistDesc !=null">resourcelist_desc,</if>
+            <if test="resourcePicture !=null">resource_picture,</if>
+            <if test="resourcelistCtime !=null">resourcelist_ctime,</if>
+            <if test="resourcelistUtime !=null">resourcelist_utime</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resourcelistId!=null">#{resourcelistId},</if>
+            <if test="user.userId!=null">#{user.userId},</if>
+            <if test="resourcelsitName!=null">#{resourcelistName},</if>
+            <if test="resourcelistDesc !=null">#{resourcelistDesc},</if>
+            <if test="resourcePicture !=null">#{resourcePicture},</if>
+            <if test="resourcelistCtime !=null">#{resourcelistCtime},</if>
+            <if test="resourcelistUtime !=null">#{resourcelistUtime}</if>
+        </trim>
+    </insert>
+</mapper>
+

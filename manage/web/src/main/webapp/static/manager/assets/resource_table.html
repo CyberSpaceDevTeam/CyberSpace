@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../frame/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<table class="layui-hide" id="test"></table>
+
+<script src="../frame/layui/layui.js" charset="utf-8"></script>
+
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+        table.render({
+            elem: '#test'
+            , url: '/demo/table/user/'
+            , cols: [[
+                {field: 'id', width: 100, title: 'ID', sort: true}
+                , {field: 'username', width: 80, title: '贡献者'}
+                , {field: 'resource_name', width: 80, title: '资源名'}
+                , {field: 'resource_count', width: 80, title: '下载数', sort: true}
+            ]]
+            , page: true
+        });
+    });
+</script>
+
+</body>
+</html>

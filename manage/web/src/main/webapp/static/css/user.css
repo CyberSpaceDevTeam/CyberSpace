@@ -1,0 +1,64 @@
+.user_body {
+    margin: auto;
+}
+
+.user_nav {
+    height: 65px;
+    width: 100%;
+    /*background-color: aqua;*/
+    position: fixed;
+}
+
+.user_nav ul li {
+    float: left;
+    list-style: none;
+    line-height: 200%;
+}
+
+.user_nav_li1 {
+    width: 60%;
+}
+
+.user_nav_li2 {
+    width: 10%;
+}
+
+.user_nav_li3 {
+    width: 20%;
+}
+
+.user_activity {
+    width: 90%;
+    height: 1000px;
+    /*background-color: #95c8bd;*/
+}
+
+.user_activity_area {
+    margin-left: 5%;
+    margin-top: 2%;
+    width: 50%;
+    height: 1000px;
+    /*background-color: #c887c2;*/
+    float: left;
+}
+
+.user_activity_userInfo {
+    width: 35%;
+    height: 350px;
+    margin-left: 6%;
+    /*background-color: #d7fffb;*/
+    float: left;
+}
+
+.user_activity_target {
+    width: 35%;
+    height: 500px;
+    margin-left: 5%;
+    /*background-color: chartreuse;*/
+    float: left;
+}
+
+.user_foot {
+    height: 100px;
+    /*background-color: #9f9c9e;*/
+}

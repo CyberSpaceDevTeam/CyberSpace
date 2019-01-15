@@ -1,0 +1,16 @@
+.topic_body {
+    margin: auto;
+}
+
+.topic_nav {
+    height: 65px;
+    width: 100%;
+    background-color: aqua;
+    position: fixed;
+}
+
+.topic_nav ul li {
+    float: left;
+    list-style: none;
+    line-height: 200%;
+}

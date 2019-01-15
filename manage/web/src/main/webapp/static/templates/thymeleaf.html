@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>thymeleaf test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<p th:text="'success, ' + ${name} + '!'">获取变量值${...}</p>
+<p>选择变量表达式*{...}</p>
+<div th:object="${session.user}">
+    <p>Name: <span th:text="*{firstName}">Sebastian</span>.</p>
+    <p>Surname: <span th:text="*{lastName}">Pepper</span>.</p>
+    <p>Nationality: <span th:text="*{nationality}">Saturn</span>.</p>
+</div>
+<p>等价于</p>
+<div>
+    <p>Name: <span th:text="${session.user.firstName}">Sebastian</span>.</p>
+    <p>Surname: <span th:text="${session.user.lastName}">Pepper</span>.</p>
+    <p>Nationality: <span th:text="${session.user.nationality}">Saturn</span>.</p>
+</div>
+<p>p里面的原有的值只是为了给前端开发时做展示用的</p>
+<p>链接表达式: @{…}</p>
+<p>用来配合link src href使用的语法，类似的标签有:th:href和th:src</p>
+<!-- Will produce 'http://localhost:8080/gtvg/order/details?orderId=3' (plus rewriting) -->
+<a href="/static/pages/main.html" th:href="@{http://localhost:8080/gtvg/order/details(orderId=${o.id})}">view</a>
+<!-- Will produce '/gtvg/order/details?orderId=3' (plus rewriting) -->
+<a href="/static/pages/main.html" th:href="@{/order/details(orderId=${o.id})}">view</a>
+<a href="/static/pages/main.html"
+   th:href="@{order/{orderId}/details(orderId=${o.id})}">Content路径,默认访问static下的order文件夹</a>
+<p>循环,通过th:each</p>
+<div>
+    <!-- 不存在则忽略，显示hello null!(可以通过默认值进行设置)-->
+    <p th:text="'Hello ' + (${name}?:'admin')">3333</p>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>AGE</th>
+        </tr>
+        <tr th:each="emp : ${empList}">
+            <td th:text="${emp.id}">1</td>
+            <td th:text="${emp.name}">海</td>
+            <td th:text="${emp.age}">18</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

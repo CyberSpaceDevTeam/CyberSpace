@@ -1,0 +1,62 @@
+.more_art_body {
+    margin: auto;
+}
+
+.more_art_nav {
+    height: 65px;
+    width: 100%;
+    background-color: aqua;
+    position: fixed;
+}
+
+.more_art_nav ul li {
+    float: left;
+    list-style: none;
+    line-height: 200%;
+}
+
+.more_art_nav_li1 {
+    /*width: 60%;*/
+}
+
+.more_art_nav_li2 {
+    /*width: 15%;*/
+}
+
+.more_art_nav_li3 {
+    /*width: 5%;*/
+}
+
+.more_art_nav_li4 {
+    /*width: 5%;*/
+}
+
+.more_art_foot {
+    height: 100px;
+    background-color: #9f9c9e;
+}
+
+.more_art_main {
+    width: 50%;
+    height: 1200px;
+    margin-left: 5%;
+    /*background-color: #00b4ef;*/
+    float: left;
+    /*position: absolute;*/
+    /*background: inherit;*/
+    /*z-index: 11;*/
+    /*box-shadow: 0 0 10px 6px rgba(0, 0, 0, .5);*/
+}
+
+.more_art_area {
+    margin-top: 2%;
+    width: 30%;
+    height: 1200px;
+    margin-left: 10%;
+    /*background-color: #9f9c9e;*/
+    float: left;
+    /*position: absolute;*/
+    /*background: inherit;*/
+    /*z-index: 12;*/
+    /*box-shadow: 0 0 10px 6px rgba(0, 0, 0, .5);*/
+}

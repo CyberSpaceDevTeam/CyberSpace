@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyber.mapper.resourceSysMapper.ResourceCommentMapper">
+
+    <!-- 手动封住结果集 -->
+    <resultMap type="ResourceComment" id="ResourceCommentMap" autoMapping="true">
+        <association property="user" javaType="User" autoMapping="true">
+            <id column="user_id" property="userId"/>
+            <result column="user_name" property="userName"/>
+        </association>
+        <association property="resource" javaType="resource" autoMapping="true">
+            <id column="resource_id" property="resourceId"/>
+        </association>
+    </resultMap>
+
+    <select id="selectList" resultMap="ResourceCommentMap">
+        SELECT *
+        FROM tb_resource_review tb1
+                 LEFT JOIN (SELECT user_name, user_id FROM tb_user) tb2 ON tb1.user_id = tb2.user_id
+        WHERE resource_id = #{resourceId}
+    </select>
+
+    <select id="selectResourceComment" resultMap="ResourceCommentMap">
+        SELECT *
+        FROM tb_resource_review tb1
+                 LEFT JOIN (SELECT user_name, user_id FROM tb_user) tb2 ON tb1.user_id = tb2.user_id
+        ORDER BY resource_review_ctime DESC
+        LIMIT 1
+    </select>
+
+    <insert id="insertResourceComment">
+        insert into tb_resource_review (resource_id, user_id, resource_review)
+        values (#{resource.resourceId}, #{user.userId}, #{resourceReview})
+    </insert>
+
+</mapper>
